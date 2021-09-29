@@ -20,31 +20,27 @@ let galleryListEl = galleryItems.map(item =>
 galleryNode.insertAdjacentHTML("beforeend", galleryListEl)
 let instance;
 
-galleryNode.addEventListener("click", e => {
-  if (e.target.tagName !== "IMG") { return false };
-
-  e.preventDefault();
-  // 1 method
-  let linkImg = e.target.dataset.source;
-  instance = basicLightbox.create(`<img
-    src='${linkImg}'
-    data-source='https://cdn.pixabay.com/photo/2019/05/14/16/43/himilayan-blue-poppy-4202825_1280.jpg'
-  />`)
+const handler = e => {
+  if (e.key === "Escape") { instance.close(); console.log("Escape") }
+  else(console.log("hoW"))
+}
   
-  // 2 method
-  // let img = e.target;
-  // img.src = linkImg
-  // const instance = basicLightbox.create(img.outerHTML)
+galleryNode.addEventListener("click", e => {
+  if (e.target.tagName !== "IMG") { return  };
+  e.preventDefault();
+
+  // 1 method
+  let linkImg = e.target.dataset.source;  
+  instance = basicLightbox.create(`<img src='${linkImg}'  width="800" height="600">`,
+  //false  true для closable щоб бачити спрацювання для keydown
+    { closable: true,
+      onShow: (instance) => { document.addEventListener("keydown", handler) },
+      onClose: (instance) => { document.removeEventListener("keydown", handler) }
+    })
   
   instance.show()
-  const handler = e => {
-    if (e.key === "Escape") {
-      onClose: (instance) => { document.removeEventListener("keydown", handler) };
-      instance.close();
-    }
-  }
-  document.addEventListener("keydown", handler);
-  // document.removeEventListener("keydown", handler)
-
-})
-
+  console.log(instance.show())
+  })
+  
+  
+  // 2 method  // let img = e.target;  // img.src = linkImg  // const instance = basicLightbox.create(img.outerHTML)  
